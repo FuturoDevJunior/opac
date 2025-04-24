@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Environment variables
+.env
+.env.*
+
+# OS files
+.DS_Store
+
+# Editor folders
+.vscode/
+.idea/
+
+# Build output
+dist/
+build/
+
+# Test coverage
+coverage/
+
+# Misc
+*.tgz 
