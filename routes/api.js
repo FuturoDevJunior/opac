@@ -32,7 +32,8 @@ async function getStockData(symbol) {
 router.get('/stock-prices', async (req, res) => {
   let { stock, like } = req.query;
   if (!stock || (Array.isArray(stock) && stock.length === 0)) {
-    return res.status(400).json({ error: 'Stock parameter is required' });
+    // Parâmetro ausente: resposta padrão FCC
+    return res.status(400).json({ stockData: null });
   }
   like = like === 'true' || like === true;
   const ip = anonymizeIp(req.ip || req.connection.remoteAddress || '');
@@ -44,7 +45,8 @@ router.get('/stock-prices', async (req, res) => {
   try {
     const results = await Promise.all(stocks.map(getStockData));
     if (results.some(r => !r)) {
-      return res.status(404).json({ error: 'Stock not found' });
+      // Stock não encontrado: resposta padrão FCC
+      return res.status(404).json({ stockData: null });
     }
 
     // Likes
@@ -84,10 +86,12 @@ router.get('/stock-prices', async (req, res) => {
         ],
       });
     } else {
-      return res.status(400).json({ error: 'Invalid stock parameter' });
+      // Parâmetro inválido: resposta padrão FCC
+      return res.status(400).json({ stockData: null });
     }
   } catch (err) {
-    return res.status(500).json({ error: 'Internal server error' });
+    // Erro interno: resposta padrão FCC
+    return res.status(500).json({ stockData: null });
   }
 });
 
