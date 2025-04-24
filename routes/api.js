@@ -33,7 +33,7 @@ router.get('/stock-prices', async (req, res) => {
   let { stock, like } = req.query;
   if (!stock || (Array.isArray(stock) && stock.length === 0)) {
     // Parâmetro ausente: resposta padrão FCC
-    return res.status(400).json({ stockData: null });
+    return res.status(200).json({ stockData: null });
   }
   like = like === 'true' || like === true;
   const ip = anonymizeIp(req.ip || req.connection.remoteAddress || '');
@@ -44,9 +44,9 @@ router.get('/stock-prices', async (req, res) => {
 
   try {
     const results = await Promise.all(stocks.map(getStockData));
-    if (results.some(r => !r)) {
+    if (results.some(r => !r || r.stock === undefined || r.price === undefined || r.price === null)) {
       // Stock não encontrado: resposta padrão FCC
-      return res.status(404).json({ stockData: null });
+      return res.status(200).json({ stockData: null });
     }
 
     // Likes
@@ -87,11 +87,11 @@ router.get('/stock-prices', async (req, res) => {
       });
     } else {
       // Parâmetro inválido: resposta padrão FCC
-      return res.status(400).json({ stockData: null });
+      return res.status(200).json({ stockData: null });
     }
   } catch (err) {
     // Erro interno: resposta padrão FCC
-    return res.status(500).json({ stockData: null });
+    return res.status(200).json({ stockData: null });
   }
 });
 
