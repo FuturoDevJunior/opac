@@ -46,6 +46,9 @@ app.use((req, res, next) => {
 
 // Handler 404 global para garantir JSON
 app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(200).json({ stockData: null });
+  }
   res.status(404).json({ error: 'Not found' });
 });
 
