@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const apiRoutes = require('./routes/api');
+const cors = require('cors');
 
 const app = express();
 
@@ -19,6 +20,15 @@ app.use(
   })
 );
 
+// Middleware CSP manual para FreeCodeCamp
+app.use((req, res, next) => {
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self'; style-src 'self'"
+  );
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -28,6 +38,15 @@ app.use('/api', apiRoutes);
 // Página inicial simples
 app.get('/', (req, res) => {
   res.send('Stock Price Checker API');
+});
+
+// CORS explícito
+app.use(cors({ origin: 'self' }));
+
+// Logging detalhado
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - IP: ${req.ip} - Query:`, req.query);
+  next();
 });
 
 const PORT = process.env.PORT || 3000;
