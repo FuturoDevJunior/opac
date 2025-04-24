@@ -44,6 +44,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Handler 404 global para garantir JSON
+app.use((req, res, next) => {
+  res.status(404).json({ error: 'Not found' });
+});
+
 // Middleware global para garantir JSON em qualquer erro
 app.use((err, req, res, next) => {
   if (res.headersSent) return next(err);
