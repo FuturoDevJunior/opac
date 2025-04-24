@@ -20,15 +20,6 @@ app.use(
   })
 );
 
-// Middleware CSP manual para FreeCodeCamp
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'self'; script-src 'self'; style-src 'self'"
-  );
-  next();
-});
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -41,7 +32,7 @@ app.get('/', (req, res) => {
 });
 
 // CORS explícito
-app.use(cors({ origin: 'self' }));
+app.use(cors());
 
 // Logging detalhado
 app.use((req, res, next) => {
